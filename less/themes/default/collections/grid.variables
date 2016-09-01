@@ -1,0 +1,43 @@
+/*---------------------------------------------------------
+     Columns
+----------------------------------------------------------*/
+
+@columnsList: one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve;
+@columnsCount: length(@columnsList);
+
+/*---------------------------------------------------------
+     Breakpoints
+----------------------------------------------------------*/
+
+@breakpointMobile            : 320px;
+@breakpointTablet            : 768px;
+@breakpointNormal            : 992px;
+@breakpointLarge             : 1200px;
+@breakpointWide              : 1920px;
+
+/*---------------------------------------------------------
+     Responsive
+----------------------------------------------------------*/
+
+@largestMobile               : (@breakpointTablet - 1px);
+@largestTablet               : (@breakpointNormal - 1px);
+@largestNormal               : (@breakpointLarge - 1px);
+@largestLarge                : (@breakpointWide - 1px);
+
+/*---------------------------------------------------------
+     Gutters
+----------------------------------------------------------*/
+
+@gutterMobile                : 10px;
+@gutterTablet                : 20px;
+@gutterNormal                : 30px;
+@gutterLarge                 : 40px;
+
+/*---------------------------------------------------------
+     Containers
+----------------------------------------------------------*/
+
+@containerDefault            : auto;
+@containerTablet             : (720px + @gutterTablet);
+@containerNormal             : (940px + @gutterNormal);
+@containerLarge              : (1140px + @gutterLarge);

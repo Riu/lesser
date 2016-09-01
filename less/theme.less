@@ -1,0 +1,17 @@
+/* Zdefiniowanie wyboru skórki dla zdefiniowanego pliku less */
+@theme: @@element;
+
+/* Mikstury domyślne (opcjonlanie)  */
+@import (optional) "@{themesFolder}/default/@{type}s/@{element}.mixins";
+
+/* Mikstury domyślne (opcjonlanie) dla wybranej skórki */
+@import (optional) "@{themesFolder}/@{theme}/@{type}s/@{element}.mixins";
+
+/* Zmienne dla zdefiniowanego modułu/pliku less */
+@import (optional) "@{themesFolder}/default/@{type}s/@{element}.variables";
+
+/* Nadpisanie zmiennych dla zdefiniowanego modułu/pliku less */
+@import (optional) "@{themesFolder}/@{theme}/@{type}s/@{element}.variables";
+
+/* Dopisanie lub nadpisanie klas zdefiniowanego modułu przez plik w skórce */
+@import (optional) "@{themesFolder}/@{theme}/@{type}s/@{element}.overrides";

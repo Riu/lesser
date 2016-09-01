@@ -1,0 +1,205 @@
+/* Element */
+@type    : 'collection';
+@element : 'grid';
+
+@import (multiple) '../../theme.config';
+
+.make-grid-columns() {
+  .col(@index) {
+    @columnIndex: extract(@columnsList, @index);
+    @item: ~".col-mobile-@{columnIndex}, .col-tablet-@{columnIndex}, .col-normal-@{columnIndex}, .col-large-@{columnIndex}";
+    .col((@index + 1), @item);
+  }
+  .col(@index, @list) when (@index =< @columnsCount) {
+    @columnIndex: extract(@columnsList, @index);
+    @item: ~".col-mobile-@{columnIndex}, .col-tablet-@{columnIndex}, .col-normal-@{columnIndex}, .col-large-@{columnIndex}";
+    .col((@index + 1), ~"@{list}, @{item}");
+  }
+  .col(@index, @list) when (@index > @columnsCount) {
+    @{list} {
+      position: relative;
+      min-height: 1px;
+    }
+  }
+  .col(1);
+}
+
+
+.padding-grid-columns(@class) {
+  .col(@index) when (@class = mobile) {
+    @columnIndex: extract(@columnsList, @index);
+    .col((@index + 1), @gutterMobile, ~".col-@{class}-@{columnIndex}");
+  }
+  .col(@index) when (@class = tablet) {
+    @columnIndex: extract(@columnsList, @index);
+    .col((@index + 1), @gutterTablet, ~".col-@{class}-@{columnIndex}");
+  }
+  .col(@index) when (@class = normal) {
+    @columnIndex: extract(@columnsList, @index);
+    .col((@index + 1), @gutterNormal, ~".col-@{class}-@{columnIndex}");
+  }
+  .col(@index) when (@class = large) {
+    @columnIndex: extract(@columnsList, @index);
+    .col((@index + 1), @gutterLarge, ~".col-@{class}-@{columnIndex}");
+  }
+  .col(@index, @gutter, @list) when (@index =< @columnsCount) {
+    @columnIndex: extract(@columnsList, @index);
+    @item: ~".col-@{class}-@{columnIndex}";
+    .col((@index + 1), @gutter, ~"@{list}, @{item}");
+  }
+  .col(@index, @gutter, @list) when (@index > @columnsCount) {
+    @{list} {
+      padding-left:  ceil((@gutter / 2));
+      padding-right: floor((@gutter / 2));
+    }
+  }
+  .col(1);
+}
+
+
+
+.float-grid-columns(@class) {
+  .col(@index) {
+    @columnIndex: extract(@columnsList, @index);
+    @item: ~".col-@{class}-@{columnIndex}";
+    .col((@index + 1), @class, @item);
+  }
+  .col(@index, @class, @list) when (@index =< @columnsCount) { // general
+    @columnIndex: extract(@columnsList, @index);
+    @item: ~".col-@{class}-@{columnIndex}";
+    .col((@index + 1), @class, ~"@{list}, @{item}");
+  }
+  .col(@index, @class, @list) when (@index > @columnsCount) { // terminal
+    @{list} {
+      float: left;
+    }
+  }
+  .col(1);
+}
+
+.calc-grid-column(@index, @class, @type) when (@type = width) and (@index > 0) {
+  @item: ~".col-@{class}-@{columnIndex}";
+  @columnIndex: extract(@columnsList, @index);
+  @{item} {
+    width: percentage((@index / @columnsCount));
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = push) and (@index > 0) {
+  @item: ~".col-@{class}-@{type}-@{columnIndex}";
+  @columnIndex: extract(@columnsList, @index);
+  @{item} {
+    left: percentage((@index / @columnsCount));
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = push) and (@index = 0) {
+  @item: ~".col-@{class}-@{type}-auto";
+  @{item} {
+    left: auto;
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = pull) and (@index > 0) {
+  @item: ~".col-@{class}-@{type}-@{columnIndex}";
+  @columnIndex: extract(@columnsList, @index);
+  @{item} {
+    right: percentage((@index / @columnsCount));
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = pull) and (@index = 0) {
+  @item: ~".col-@{class}-@{type}-auto";
+  @{item} {
+    right: auto;
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = offset) and (@index > 0) {
+  @item: ~".col-@{class}-@{type}-@{columnIndex}";
+  @columnIndex: extract(@columnsList, @index);
+  @{item} {
+    margin-left: percentage((@index / @columnsCount));
+  }
+}
+
+.loop-grid-columns(@index, @class, @type) when (@index > 0) {
+  .calc-grid-column(@index, @class, @type);
+  .loop-grid-columns((@index - 1), @class, @type);
+}
+
+.make-grid(@class) {
+  .float-grid-columns(@class);
+  .loop-grid-columns(@columnsCount, @class, width);
+  .loop-grid-columns(@columnsCount, @class, pull);
+  .loop-grid-columns(@columnsCount, @class, push);
+  .loop-grid-columns(@columnsCount, @class, offset);
+  .padding-grid-columns(@class);
+}
+
+
+
+.container-fixed() {
+  margin-right: auto;
+  margin-left: auto;
+  &:extend(.clearfix all);
+}
+
+.container-padding(@gutter) {
+  padding-left:  (@gutter / 2);
+  padding-right: (@gutter / 2);
+}
+
+.make-row-padding(@gutter) {
+  .row {
+    margin-left:  ceil((@gutter / -2));
+    margin-right: floor((@gutter / -2));
+  }
+}
+
+.make-row() {
+  &:extend(.clearfix all);
+}
+
+
+.container {
+  .container-fixed();
+  .container-padding(@gutterMobile);
+  .make-row-padding(@gutterMobile);
+  @media (min-width: @breakpointTablet) {
+    width: @containerTablet;
+    .container-padding(@gutterTablet);
+    .make-row-padding(@gutterTablet);
+  }
+  @media (min-width: @breakpointNormal) {
+    width: @containerNormal;
+    .container-padding(@gutterNormal);
+    .make-row-padding(@gutterNormal);
+  }
+  @media (min-width: @breakpointLarge) {
+    width: @containerLarge;
+    .container-padding(@gutterLarge);
+    .make-row-padding(@gutterLarge);
+  }
+}
+
+.fluid {
+  width: auto;
+}
+
+.row {
+  .make-row();
+}
+
+/*---------------------------------------------------------
+     Make columns
+----------------------------------------------------------*/
+
+.make-grid-columns();
+
+.make-grid(mobile);
+
+@media (min-width: @breakpointTablet) {
+  .make-grid(tablet);
+}
+@media (min-width: @breakpointNormal) {
+  .make-grid(normal);
+}
+@media (min-width: @breakpointLarge) {
+  .make-grid(large);
+}

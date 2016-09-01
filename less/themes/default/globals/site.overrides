@@ -1,0 +1,8 @@
+/* Nadpisanie: Site */
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&subset=latin,latin-ext');
+body{
+    background-color: @md-grey-900;
+    /* padding zależny od navbara */
+    padding-top: 60px;
+    font-family: "Roboto", sans-serif;
+}
